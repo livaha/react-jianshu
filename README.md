@@ -18,6 +18,44 @@ yarn start
 
 ## 基础
 
+### jsx注释
+
+~~~jsx
+class Todo extends Component{
+    render(){
+        return(
+        	<Fragment>
+        		{/*这是一个注释*/}
+        		<p>其它标签</p>
+        	</Fragment>
+        )
+    }
+}
+~~~
+
+
+
+### label  扩大对焦区域
+
+~~~
+<label htmlFor="inserArea">输入内容</label>
+<input id="insertArea" />
+~~~
+
+
+
+### dangerouslySetInnerHTML
+
+~~~
+<li key={item} onClick={this.handleItemDelete.bind(this,index)}>
+	dangerouslySetInnerHTML={{__html:item}}
+</li>
+~~~
+
+避免出现html标签当作text格式的现象
+
+
+
 ### 插入单一标签替换div
 
 ~~~ jsx
@@ -251,7 +289,9 @@ function myFunction() {
 
 
 
-### immutable
+### setState 多种写法
+
+#### 1 immutable
 
 react 中有个immutable,它不允许我们修改state，如果非要修改，可以通过setState函数来改变，而不是直接this.state.list = xxx;
 
@@ -270,9 +310,82 @@ handleItemDelete(index){
 
 
 
+#### 2 异步setState
+
+~~~jsx
+handleInputChange(e){
+    const value = e.target.value;
+    this.setState(()=>{
+        inputValue:value,
+        //inputValue:e.target.value,   这样子会报错，需要在外面先赋值好
+    })
+}
+~~~
+
+#### 3 异步setState的参数：prevSstate
+
+setState变为异步函数后，它有个参数prevSstate为未修改state前的值
+
+~~~jsx
+list:["hello!!!","hi react"],
+handleBtnClick(){
+    this.setState({
+        list:[...this.state.list,this.state.inputValue]
+    })
+}
+上面的相当于下面的
+handleBtnClick(){
+    this.setState((prevState)=>({
+        list:[...prevState.list,prevState.inputValue]
+    }))
+}
+~~~
+
+#### 4 异步setState加了return后
+
+~~~jsx
+handleItemDelete(index){
+    const list = [...this.state.list];
+    list.splice(index,1);
+    this.setState({
+        list:list
+    })
+}
+相当于下面的：
+handleItemDelete(index){
+    this.setState((prevState)=>{
+    	const list = [...prevState.list];
+    	list.splice(index,1);
+        return {list}
+    })
+}
+~~~
 
 
 
+
+
+
+
+### 组件间的传值
+
+#### 父向子传值 
+
+通过属性方式
+
+09
+
+
+
+#### 子向父传值
+
+14
+
+子组件调用父组件的方法来修改父组件的内容
+
+因为是调用父组件的方法，所以在子组件里执行传过来的函数会相当于在父组件里面执行它的函数一样，但父组件传值过来需要通过.bind(this)来绑定它的this组件
+
+删除子组件
 
 
 
