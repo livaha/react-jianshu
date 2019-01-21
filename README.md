@@ -542,7 +542,13 @@ componentWillUnmount
 1 性能优化
 
 ~~~
-
+shouldComponentUpdate(nextProps,nextState){
+    if(nextProps.content !== this.props.content){
+        return true;
+    }else{
+        reutrn false;
+    }
+}
 ~~~
 
 在接收到组件的props发生变化时，是否需要改变，提高性能
@@ -560,7 +566,16 @@ setState异步请求(加参数)
 2 发送ajax请求
 
 ~~~
-
+componentDidMount(){
+    axios.get('/api/todolist')
+    	.then((res)=>{
+            //console.log(res.data);
+            this.setState(()=>({
+                list:[...res.data]
+            }));
+    	})
+    	.catch(()=>{alert('error')})
+}
 ~~~
 
 一般在componentDidMount里发送异步请求， 
@@ -731,6 +746,14 @@ store.subscribe
 ## redux发送异步请求获取数据
 
 
+
+### redux-thunk
+
+用来将ajax请求放在action里面
+
+~~~
+
+~~~
 
 
 
