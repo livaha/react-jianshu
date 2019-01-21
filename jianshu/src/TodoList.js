@@ -2,7 +2,7 @@ import React , {Component} from 'react';
 import TodoListUI from './TodoListUI';
 import store from './store';
 import axios from 'axios'
-import {getInputChangeAction,getAddItemAction,getDeleteItemAction,initListAction} from './store/action';
+import {getTodoList,getInputChangeAction,getAddItemAction,getDeleteItemAction,initListAction} from './store/action';
 
 class TodoList extends Component{
     constructor(props){
@@ -12,6 +12,10 @@ class TodoList extends Component{
         store.subscribe(this.handleStoreChange);
     }
     componentDidMount(){
+        const action = getTodoList();
+        console.log(action);
+        store.dispatch(action);
+/*
         axios.get('https://www.easy-mock.com/mock/5c37155bf2375651600a2330/example/api/todolist')
             .then((res)=>{
                 console.log(res)
@@ -22,7 +26,7 @@ class TodoList extends Component{
             })
             .catch=()=>{
                 alert('error')
-            }
+            }*/
     }
     render(){
         return (

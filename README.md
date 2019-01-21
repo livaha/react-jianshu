@@ -747,17 +747,46 @@ store.subscribe
 
 
 
-### redux-thunk
+## redux-thunk
 
 用来将ajax请求放在action里面
 
 ~~~
+yarn add redux-thunk --save
+~~~
+
+redux的中间件
+
+引入 中间件， 
+
+~~~jsx
+import {createStore,applyMiddleware,compose} from 'redux';
+import reducer from './reducer';
+import thunk from 'redux-thunk';
+
+const composeEnhancers =
+  typeof window === 'object' &&
+  window.__REDUX_DEVTOOLS_EXTENSION_COMPOSE__ ?   
+    window.__REDUX_DEVTOOLS_EXTENSION_COMPOSE__({
+      // Specify extension’s options like name, actionsBlacklist, actionsCreators, serialize...
+    }) : compose;
+    
+const enhancer = composeEnhancers(
+    applyMiddleware(thunk)
+);
+
+const store = createStore(
+    reducer,
+    enhancer
+);
+
+export default store;
 
 ~~~
 
 
 
-
+引用 了redux-thunk后，action可以return函数了， 之前是return 对象 
 
 
 
