@@ -788,11 +788,153 @@ export default store;
 
 引用 了redux-thunk后，action可以return函数了， 之前是return 对象 
 
+store/action.js
+
+~~~jsx
+export const getTodoList =()=>{   
+    return (dispatch)=>{        
+        axios.get('https://www.easy-mock.com/mock/5c37155bf2375651600a2330/example/api/todolist')
+            .then((res)=>{
+                console.log(res)
+                const data = res.data.data;
+                const action = initListAction(data);
+                dispatch(action);
+                //console.log(action)
+                //store.dispatch(action);
+            })
+            .catch=()=>{
+                alert('error')
+            }
+    }
+}
+~~~
+
+
+
+~~~jsx
+componentDidMount(){
+        const action = getTodoList();
+        console.log(action);
+        store.dispatch(action);
+}
+~~~
+
+在调用 了store.dispatch(action);后，store接收到action如果是函数，它会自动 判断 是函数后会去执行函数，函数会自动传进去一个函数参数dispatch，通过 它来派发action
+
+代码区别：https://github.com/sbwxffnhc/react-jianshu/commit/d6d23ff3b80b212af8c8aab243d753ad443b3835
+
+## redux-saga
+
+中间件指的是  action与store的中间
+
+异步代码处理的中间件，放到一个文件 中
+
+代码恢复 到不使用redux-thunk的状态 
+
+
+
+generator函数
+
+
+
+略
+
+
+
+## react-redux
+
+~~~
+yarn add react-redux --save
+~~~
+
+
+
++ Provider关联store
+
+~~~jsx
+import {Provider} from 'react-redux'
+const App=(
+	<Provider store={store}>
+  	<TodoList/>
+    <A/>
+  </Provider>
+)
+~~~
+
+Provider组件对store进行了关联 ，所有Provider下的子组件都可以取到store里的值
+
+
+
++ 子组件获取store  --- connect
+
+让子组件通过 connect对store进行连接 
+
+1 连接参数：mapStateToProps
+
+​	将store里的数据映射到组件的props里面,组件通过 this.props.value来获取就可以了
+
+~~~jsx
+const mapStateToProps = (state) =>{
+  return{
+    inputValue:state.inputValue
+  }
+}
+~~~
+
+2 mapDispatchToProps
+
+​	将store.dispatch方法挂载到props上
+
+​	如果对store数据作修改，则可以通过 此方法去将你要改变值的实现函数写在里面
+
+~~~jsx
+。。。onChange={this.prpos.changeInputValue}
+
+const mapDispatchToProps = (dispatch)=>{
+  return{
+    changeInputValue(e){
+      const action = {type:'test',value=e.target.value}
+      dispatch(action)
+    },
+    handleClick(){
+      const action = {type:'test2',value}
+      dispatch(action)
+    }
+  }
+}
+~~~
+
+3 关联
+
+~~~jsx
+export default connect(mapStateToProps,mapDispatchToProps)(组件名)
+~~~
+
+
+
+注意：因为connect对store作了连接 ，所以store的数据改变，数据会自动地进行连接改变，有了connect后，就不是订阅函数subscript了
+
+
+
+### 容器组件
+
+render下的是一个UI组件 
+
+而connect连接 的UI组件加上业务逻辑 ，返回 的就是一个容器组件
+
+~~~jsx
+export default connect(mapStateToProps,mapDispatchToProps)(组件名)
+~~~
 
 
 
 
 
+## 项目
+
+用styled-components来管理 样式
+
+reset.css  ，，PC 端的统一样式 ，兼容PC所有浏览器
 
 
 
