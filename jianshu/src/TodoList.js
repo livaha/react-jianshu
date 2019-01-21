@@ -1,35 +1,24 @@
 import React , {Component} from 'react';
-import 'antd/dist/antd.css';
-import { Input,Button,List } from 'antd';
+import TodoListUI from './TodoListUI';
 import store from './store';
-import {getInputChangeAction,getAddItemAction,getDeleteItemAction} from './store/action'
+import {getInputChangeAction,getAddItemAction,getDeleteItemAction} from './store/action';
 
 class TodoList extends Component{
     constructor(props){
         super(props);
-        this.state = store.getState()
+        this.state = store.getState();
+        this.handleItemDelete = this.handleItemDelete.bind(this);
         store.subscribe(this.handleStoreChange);
     }
     render(){
         return (
-            <div>
-                <div>
-                    <Input 
-                        value={this.state.inputValue} 
-                        style={{width:'300px' ,margin:'10px 10px 0 0'}} 
-                        onChange = {this.handleInputChange}
-                    />
-                    <Button type="primary" onClick={this.handleBtnClick}>提交</Button>
-                </div>
-                <List 
-                    style={{marginTop:'10px',width:'300px'}}
-                    bordered
-                    dataSource={this.state.list}
-                    renderItem={(item,index)=>(<List.Item onClick={this.handleItemDelete.bind(this,index)}>{item}</List.Item>)}
-                />
-            </div>
-
-        )
+        <TodoListUI
+            inputValue = {this.state.inputValue}
+            list = {this.state.list}
+            handleInputChange = {this.handleInputChange}
+            handleBtnClick = {this.handleBtnClick}
+            handleItemDelete = {this.handleItemDelete}
+        />)
     }
     handleInputChange=(e)=>{
         //console.log(e.target.value)
@@ -43,7 +32,7 @@ class TodoList extends Component{
         const action = getAddItemAction();
         store.dispatch(action);
     }
-    handleItemDelete=(index)=>{        
+    handleItemDelete(index){        
         const action = getDeleteItemAction(index);
         store.dispatch(action);
     }
