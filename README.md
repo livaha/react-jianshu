@@ -561,6 +561,8 @@ constructor
 
 setState异步请求(加参数)
 
+无状态组件也可提高性能 
+
 
 
 2 发送ajax请求
