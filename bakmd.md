@@ -8,11 +8,11 @@
 
 ## 安装
 
-~~~
+```
 初始化项目：create-react-app jianshu
 cd jianshu
 yarn start
-~~~
+```
 
 
 
@@ -20,7 +20,7 @@ yarn start
 
 ### jsx注释
 
-~~~jsx
+```jsx
 class Todo extends Component{
     render(){
         return(
@@ -31,26 +31,26 @@ class Todo extends Component{
         )
     }
 }
-~~~
+```
 
 
 
 ### label  扩大对焦区域
 
-~~~
+```
 <label htmlFor="inserArea">输入内容</label>
 <input id="insertArea" />
-~~~
+```
 
 
 
 ### dangerouslySetInnerHTML
 
-~~~
+```
 <li key={item} onClick={this.handleItemDelete.bind(this,index)}>
 	dangerouslySetInnerHTML={{__html:item}}
 </li>
-~~~
+```
 
 避免出现html标签当作text格式的现象
 
@@ -58,7 +58,7 @@ class Todo extends Component{
 
 ### 插入单一标签替换div
 
-~~~ jsx
+```jsx
 import React, { Component,Fragment} from 'react;
 class Todo extends Component{
     render(){
@@ -69,19 +69,19 @@ class Todo extends Component{
         )
     }
 }
-~~~
+```
 
 Fragment作用为：替换原有的div作为根标签，不在页面显示出来 （React 16版本以后提供）
 
 
 
-###  ServiceWorker的作用
+### ServiceWorker的作用
 
 Web离线应用解决方案——ServiceWorker：https://www.cnblogs.com/dojo-lzz/p/8047336.html
 
 原入口文件index.js：
 
-~~~jsx
+```jsx
 import React from 'react';
 import ReactDOM from 'react-dom';
 import App from './App';
@@ -91,13 +91,13 @@ ReactDOM.render(<App />, document.getElementById('root'));
 
 serviceWorker.unregister();
 
-~~~
+```
 
 
 
-###  组件基本介绍 
+### 组件基本介绍
 
-~~~
+```
 import React, { Component,Fragment} from 'react;
 class Todo extends Component{
 	constructor(prpos){
@@ -115,17 +115,17 @@ class Todo extends Component{
         )
     }
 }
-~~~
+```
 
-+ Todo 类是继承Component，所以它的父类是Component
-+ 类下会有一个构造函数，进入类首先会执行构造函数，它里面的参数props是继承于父类的
-+ react的数据是要存入在state里面
+- Todo 类是继承Component，所以它的父类是Component
+- 类下会有一个构造函数，进入类首先会执行构造函数，它里面的参数props是继承于父类的
+- react的数据是要存入在state里面
 
 
 
 ### React中的响应式设计思想和事件绑定
 
-~~~jsx
+```jsx
 import React, { Component,Fragment} from 'react'
 class Todo extends Component{
 	constructor(props){
@@ -153,33 +153,33 @@ class Todo extends Component{
     }
 }
 export default Todo;
-~~~
+```
 
 - .bind(this)的使用
 
-~~~
+```
 1 在hadleInputChange不是箭头函数的时候：
 	this.hadleInputChange.bind(this)    ---->  .bind(this) 是绑定当前组件的this
 2 当hadleInputChange是箭头的时候，不需要.bind(this)
 	this.hadleInputChange
-~~~
+```
 
 - 组件的state里的值必须是通过react封装好的函数来改变
 
-  ~~~jsx
+  ```jsx
       hadleInputChange(e){
           console.log(e.target)
           this.setState({
               inputValue:e.target.value
           })
       }
-  ~~~
+  ```
 
   
 
 ### 列表循环与.map方法
 
-~~~jsx
+```jsx
 class Todo extends Component{
 	constructor(props){
         super(props);
@@ -201,29 +201,29 @@ class Todo extends Component{
         )
     }
 }
-~~~
+```
 
 map方法是对数据的一个循环遍历，里面可以有两个参数,item和index,如示例就会生成：
 
-~~~html
+```html
 <ul>
     <li>hello!!!</li>
     <li>hi react</li>
 </ul>
-~~~
+```
 
 
 
 ### 展开运算符 ...list
 
-~~~
+```
 list:["hello!!!","hi react"],
 handleBtnClick(){
     this.setState({
         list:[...this.state.list,this.state.inputValue]
     })
 }
-~~~
+```
 
 这个是将原有的list展开后，和inputValue组成新的数组
 
@@ -231,7 +231,7 @@ handleBtnClick(){
 
 ### 删除 index下标
 
-~~~jsx
+```jsx
 {
     this.state.list.map((item,index)=>{
         return(
@@ -249,7 +249,7 @@ handleItemDelete(index){
         list:list
     })
 }
-~~~
+```
 
 删除操作的是数据，不操作dom,所以我们要改变的是state里面的数据
 
@@ -259,21 +259,21 @@ handleItemDelete(index){
 
 1 备份list数组：
 
-~~~
+```
 const list = [...this.state.list]
-~~~
+```
 
 2 删除下标为index的1个数
 
-~~~
+```
 list.splice(index,1)
-~~~
+```
 
 3 数组循环，通过map方法  
 
 可参考上面的map方法示例，下面例子抄自菜鸟
 
-~~~
+```
 返回一个数组，数组中元素为原始数组的平方根:
 
 var numbers = [4, 9, 16, 25];
@@ -285,7 +285,7 @@ function myFunction() {
 输出结果为:
 
 2,3,4,5
-~~~
+```
 
 
 
@@ -297,7 +297,7 @@ react 中有个immutable,它不允许我们修改state，如果非要修改，�
 
 例如正确的示例：
 
-~~~jsx
+```jsx
 handleItemDelete(index){
     const list = [...this.state.list];
     list.splice(index,1);
@@ -306,13 +306,13 @@ handleItemDelete(index){
         list:list
     })
 }
-~~~
+```
 
 
 
 #### 2 异步setState
 
-~~~jsx
+```jsx
 handleInputChange(e){
     const value = e.target.value;
     this.setState(()=>{
@@ -320,13 +320,13 @@ handleInputChange(e){
         //inputValue:e.target.value,   这样子会报错，需要在外面先赋值好
     })
 }
-~~~
+```
 
 #### 3 异步setState的参数：prevSstate
 
 setState变为异步函数后，它有个参数prevSstate为未修改state前的值
 
-~~~jsx
+```jsx
 list:["hello!!!","hi react"],
 handleBtnClick(){
     this.setState({
@@ -339,11 +339,11 @@ handleBtnClick(){
         list:[...prevState.list,prevState.inputValue]
     }))
 }
-~~~
+```
 
 #### 4 异步setState加了return后
 
-~~~jsx
+```jsx
 handleItemDelete(index){
     const list = [...this.state.list];
     list.splice(index,1);
@@ -359,7 +359,7 @@ handleItemDelete(index){
         return {list}
     })
 }
-~~~
+```
 
 
 
@@ -369,7 +369,7 @@ handleItemDelete(index){
 
 ### 组件间的传值
 
-#### 父向子传值 
+#### 父向子传值
 
 通过属性方式
 
@@ -397,19 +397,6 @@ redux = reducer + flux
 
 
 
-### 安装浏览器扩展程序：redux devtools
-
-在代码里添加下面这一句启动redux-devtools
-
-```
- const store = createStore(
-   reducer, /* preloadedState, */
-+  window.__REDUX_DEVTOOLS_EXTENSION__ && window.__REDUX_DEVTOOLS_EXTENSION__()
- );
-```
-
-
-
 ### redux工作流程
 
 ![1548035119254](assets/1548035119254.png)
@@ -420,110 +407,16 @@ redux = reducer + flux
 yarn add redux
 ```
 
-store/index.js   创建store
+浏览器 安装扩展程序：redux devtools
 
-~~~jsx
-import {createStore} from 'redux';
-import reducer from './reducer';
-const store = createStore(
-    reducer,
-    window.__REDUX_DEVTOOLS_EXTENSION__ && window.__REDUX_DEVTOOLS_EXTENSION__(),
-);
+在代码里添加下面这一句启动redux-devtools
 
-export default store;
-
-~~~
-
-
-
-store/reducer.js 创建reducer
-
-~~~jsx
-const defaultState = {
-    inputValue:'abc',
-    list:[1,2],
-}
-export default (state = defaultState,action)=>{
-    //state为之前的数据，action为得到当前收到的动作
-    console.log(state,action)
-    return state;
-}
-~~~
-
-组件 TodoList.js       将store的state赋值给组件的state
-
-~~~jsx
-import store from './store'
-class TodoList extends Component{
-    constructor(props){
-        super(props);
-        this.state = store.getState()
-    }
-    ...
-}
-~~~
-
-
-
-在组件中用dispatch发送一个action:
-
-~~~jsx
-    handleInputChange=(e)=>{
-        //console.log(e.target.value)
-        const action = {
-            type:'change_input_value',
-            value:e.target.value
-        }
-        store.dispatch(action);
-    }
-~~~
-
-store收到action会自动地将action转发给reducer,
-
-reducer对收到的动作做进一步的处理，处理完后会返回给store，替换掉旧数据
-
-reducer.js
-
-~~~jsx
-const defaultState = {
-    inputValue:'abc',
-    list:[1,2],
-}
-
-export default (state = defaultState,action)=>{
-    //state为之前的数据，action为得到当前收到的动作
-    //console.log(state,action)
-    if(action.type === 'change_input_value'){
-        const newState = JSON.parse(JSON.stringify(state));
-        newState.inputValue = action.value;
-        return newState;
-    }
-    return state;
-}
-~~~
-
-
-
-在组件中写一个订阅函数，只要store中的state数据发生改变就会执行这个订阅函数
-
-在store发生变化后，将store的数据更新到组件的数据中
-
-TodoList.js
-
-~~~jsx
-class TodoList extends Component{
-    constructor(props){
-        super(props);
-        this.state = store.getState()
-        store.subscribe(this.handleStoreChange);
-    }
-    handleStoreChange=()=>{
-        this.setState(store.getState())
-    }
-}
-~~~
-
-
+```
+ const store = createStore(
+   reducer, /* preloadedState, */
++  window.__REDUX_DEVTOOLS_EXTENSION__ && window.__REDUX_DEVTOOLS_EXTENSION__()
+ );
+```
 
 
 
