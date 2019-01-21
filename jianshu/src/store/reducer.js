@@ -23,5 +23,11 @@ export default (state = defaultState,action)=>{
         newState.list.splice(action.index,1)
         return newState;
     }
+    if(action.type === ACTION_TYPE.INIT_LIST){
+        console.log(action)
+        const newState = JSON.parse(JSON.stringify(state));
+        newState.list = action.value;
+        return newState;
+    }
     return state;
 }
