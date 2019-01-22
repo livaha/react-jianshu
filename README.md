@@ -592,6 +592,107 @@ setState写在匿名函数的比较好
 
 https://www.easy-mock.com/
 
+
+
+
+
+## immutable.js
+
+帮我们生成immutable对象（不可改变）
+
+如果state是immutable对象，state原本是不可改变，用了immutable就 不 容易出错 
+
+将state变成immutable对象
+
+```
++import {fromJS} from 'immutable'
+-const defaultState = {
+-    focused:false
+-}
++const defaultState = fromJS({
++    focused:false
++})
+```
+
+
+
+```
+-const mapStateToProps = (state)=>{
+-    return{
+-        focused:state.header.focused
+-    }
+-}
++const mapStateToProps = (state)=>{
++    return{
++        focused:state.header.get('focused')
++    }
++}
+```
+
+
+
+```
+export default (state = defaultState , action)=>{
+-	if(action.type === ACTIONTYPE.FOCUS){
+-        return{
+-            focused:false
+-        }
+-	}
++	if(action.type === ACTIONTYPE.FOCUS){
++		//immutable对象的set方法，会结合之前immutable对象的值
++		//和设置的值，返回一个全新的对象（并没有改变state的值）
++        return state.set('focused',true);
++	}
+    return state;
+}
+```
+
+
+
+## redux-immutable
+
+将state和组件的state，统一成immutable对象
+
+
+
+```
+-import {combineReducers} from 'redux';
++import {combineReducers} from 'redux-immutable';
+```
+
+
+
+```
+const mapStateToProps = (state)=>{
+    return{
+-        focused:state.header.get('focused')
++        focused:state.get('header').get('focused')
+    }
+}
+```
+
+
+
+另一种写法：
+
+```
+const mapStateToProps = (state)=>{
+    return{
+-        focused:state.get('header').get('focused')
++		//意思是获取 header下面的focused值
++        focused:state.getIn(['header','focused'])
+    }
+}
+```
+
+
+
+## 用redux-thunk将ajax异步请求统一放在action里面
+
+
+
+
+
 ## redux
 
 redux = reducer + flux
