@@ -649,6 +649,22 @@ export default (state = defaultState , action)=>{
 
 
 
+immutable数组：
+
+因为state变成了immutable对象后，它里面的数组也应该是immubable类型的数组
+
+~~~
+const changeList = (data)=>{
+    type:ACTION.CHANGE_LIST,
+-    data
++    data:fromJS(data)
+}
+~~~
+
+
+
+
+
 ## redux-immutable
 
 将state和组件的state，统一成immutable对象
@@ -688,6 +704,30 @@ const mapStateToProps = (state)=>{
 
 
 ## 用redux-thunk将ajax异步请求统一放在action里面
+
+在store里面引入 thunk插件
+
+```jsx
+import {createStore,compose,applyMiddleware} from 'redux';
+import reducer from './reducer';
+import thunk from 'redux-thunk';
+
+const composeEnhancers =
+  typeof window === 'object' &&
+  window.__REDUX_DEVTOOLS_EXTENSION_COMPOSE__ ?   
+    window.__REDUX_DEVTOOLS_EXTENSION_COMPOSE__({
+      // Specify extension’s options like name, actionsBlacklist, actionsCreators, serialize...
+    }) : compose;
+
+const enhancer = composeEnhancers(
+  applyMiddleware(thunk),
+  // other store enhancers if any
+);
+const store = createStore(reducer, enhancer);
+
+export default store;
+
+```
 
 
 
