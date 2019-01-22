@@ -389,11 +389,225 @@ handleItemDelete(index){
 
 
 
+
+
+## react 基础进阶
+
+### 自行安装 react插件
+
+安装后可以看到react代码及各组件中的值 等
+
+
+
+### PropTypes 与DefaultProps
+
+
+
+```
+import propTypes from 'prop-type'     对属性作检验，脚手架自带
+
+const propTypes = {
+  value: PropTypes.oneOfType([PropTypes.string, PropTypes.number]),
+  className: PropTypes.string,
+  size: PropTypes.oneOf(['sm', 'lg']),
+  onChange: PropTypes.func,
+  options: PropTypes.oneOfType([PropTypes.array, PropTypes.object]),
+  style: PropTypes.object,
+  role: PropTypes.oneOf(['switch']),
+  minWidth: PropTypes.string,
+  disabled: PropTypes.any,
+  readOnly: PropTypes.any,
+};
+
+const defaultProps = {
+  role: 'switch',
+  disabled: false,
+  readOnly: false,
+};
+
+```
+
+
+
+###  props,state与render函数的关系
+
+当组件的state或props发生改变的时候，render函数就会重新执行，
+
+当然子组件的render也会执行。
+
+
+
+### 虚拟DOM
+
+
+
+### react 中ref的使用
+
+
+
+
+
+### setState中的异步请求
+
+```jsx
+handleBtnClick(){
+    this.setState((prevState)=>({
+        list:[...prevState.list,prevState.inputValue],
+    }),()=>{
+        console.log(this.ul.querySelectorAll('div').length); //  1
+    })
+    console.log(this.ul.querySelectorAll('div').length);  //0
+}
+
+```
+
+setState是一个异步函数，所以如果你需要操作dom，setState提供一个参数,用于异步请求完成的时候执行。
+
+
+
+### 生命周期函数
+
+![1548068907164](assets/1548068907164.png)
+
+生命周期函数指在某一个时刻组件会自动调用执行的函数
+
+每个组件都会有生命周期函数 
+
+挂载：
+
+componentWillMount
+
+在组件即将挂载到页面的时候执行 
+
+
+
+render页面挂载的时候执行
+
+
+
+componentDidMount
+
+页面被挂载完成后执行，
+
+
+
+更新：
+
+数据发生变化 的时候， props或states
+
+
+
+componentWillReceiveProps
+
+当一个组件从父组件接收参数
+
+只要父组件的render函数被重新执行（重新渲染）了，子组件的这个生命周期函数就会被执行
+
+接收props，并且props被改变后才会执行
+
+
+
+shouldComponentUpdate , 要求返回bool类型
+
+组件被更新之前，会自动执行，为true,组件需要被更新， 为false ,组件不会被更新
+
+
+
+componentWillUpdate
+
+组件被更新之前，它会自动执行，但是他在shouldComponentUpdate之后执行
+
+如果shouldComponentUpdate返回true才执行，返回false则不会执行
+
+
+
+render
+
+
+
+componentDidUpdate
+
+组件更新完后会被更新
+
+
+
+componentWillUnmount
+
+当这个组件即将被从页面中剔除的时候会被执行
+
+
+
+### 生命周期函数使用场景
+
+1 性能优化
+
+```
+shouldComponentUpdate(nextProps,nextState){
+    if(nextProps.content !== this.props.content){
+        return true;
+    }else{
+        reutrn false;
+    }
+}
+```
+
+在接收到组件的props发生变化时，是否需要改变，提高性能
+
+
+
+提高性能的还有：
+
+constructor
+
+setState异步请求(加参数)
+
+
+
+2 发送ajax请求
+
+```
+componentDidMount(){
+    axios.get('/api/todolist')
+    	.then((res)=>{
+            //console.log(res.data);
+            this.setState(()=>({
+                list:[...res.data]
+            }));
+    	})
+    	.catch(()=>{alert('error')})
+}
+```
+
+一般在componentDidMount里发送异步请求， 
+
+setState写在匿名函数的比较好
+
+
+
+### 使用Charles进行本地接口数据模拟
+
+其实跟mock差不多，这个Charles要进行安装 ，不作介绍 
+
+https://www.easy-mock.com/
+
 ## redux
 
 redux = reducer + flux
 
 ![1548035071863](assets/1548035071863.png)
+
+
+
+### 安装浏览器扩展程序：redux devtools
+
+在代码里添加下面这一句启动redux-devtools
+
+```
+ const store = createStore(
+   reducer, /* preloadedState, */
++  window.__REDUX_DEVTOOLS_EXTENSION__ && window.__REDUX_DEVTOOLS_EXTENSION__()
+ );
+```
 
 
 
@@ -407,20 +621,139 @@ redux = reducer + flux
 yarn add redux
 ```
 
-浏览器 安装扩展程序：redux devtools
+store/index.js   创建store
 
-在代码里添加下面这一句启动redux-devtools
+```jsx
+import {createStore} from 'redux';
+import reducer from './reducer';
+const store = createStore(
+    reducer,
+    window.__REDUX_DEVTOOLS_EXTENSION__ && window.__REDUX_DEVTOOLS_EXTENSION__(),
+);
+
+export default store;
 
 ```
- const store = createStore(
-   reducer, /* preloadedState, */
-+  window.__REDUX_DEVTOOLS_EXTENSION__ && window.__REDUX_DEVTOOLS_EXTENSION__()
- );
+
+
+
+store/reducer.js 创建reducer
+
+```jsx
+const defaultState = {
+    inputValue:'abc',
+    list:[1,2],
+}
+export default (state = defaultState,action)=>{
+    //state为之前的数据，action为得到当前收到的动作
+    console.log(state,action)
+    return state;
+}
+```
+
+组件 TodoList.js       将store的state赋值给组件的state
+
+```jsx
+import store from './store'
+class TodoList extends Component{
+    constructor(props){
+        super(props);
+        this.state = store.getState()
+    }
+    ...
+}
 ```
 
 
 
+在组件中用dispatch发送一个action:
 
+```jsx
+    handleInputChange=(e)=>{
+        //console.log(e.target.value)
+        const action = {
+            type:'change_input_value',
+            value:e.target.value
+        }
+        store.dispatch(action);
+    }
+```
+
+store收到action会自动地将action转发给reducer,
+
+reducer对收到的动作做进一步的处理，处理完后会返回给store，替换掉旧数据
+
+reducer.js
+
+```jsx
+const defaultState = {
+    inputValue:'abc',
+    list:[1,2],
+}
+
+export default (state = defaultState,action)=>{
+    //state为之前的数据，action为得到当前收到的动作
+    //console.log(state,action)
+    if(action.type === 'change_input_value'){
+        const newState = JSON.parse(JSON.stringify(state));
+        newState.inputValue = action.value;
+        return newState;
+    }
+    return state;
+}
+```
+
+
+
+在组件中写一个订阅函数，只要store中的state数据发生改变就会执行这个订阅函数
+
+在store发生变化后，将store的数据更新到组件的数据中
+
+TodoList.js
+
+```jsx
+class TodoList extends Component{
+    constructor(props){
+        super(props);
+        this.state = store.getState()
+        store.subscribe(this.handleStoreChange);
+    }
+    handleStoreChange=()=>{
+        this.setState(store.getState())
+    }
+}
+```
+
+小总结 ：
+
+reducer 可以接受state,但是绝不能修改state
+
+reducer必须是纯函数，纯函数指的是，给定固定的输入，就一定会有固定的输出，而且不会有任何副作用（不能有定时，回调，等）
+
+
+
+redux的核心API：
+
+```
+createStore
+store.dispatch
+store.getState
+store.subscribe
+```
+
+
+
+## redux发送异步请求获取数据
+
+
+
+### redux-thunk
+
+用来将ajax请求放在action里面
+
+```
+yarn add redux-thunk 
+```
 
 
 
