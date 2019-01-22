@@ -946,7 +946,50 @@ reset.css  ，，PC 端的统一样式 ，兼容PC所有浏览器
 
 
 
+## 压缩代码
+
+https://www.cnblogs.com/wangyue99599/p/8136108.html
+
+1 使用webpack压缩插件
+
+安装 ：
+
+~~~
+yarn add uglifyjs-webpack-plugin -d
+~~~
+
+使用:
+
+~~~
+ //在webpack.config.js文件中做如下配置
+    const UglifyJSPlugin = require('uglifyjs-webpack-plugin');
+
+    plugins: [
+         new UglifyJSPlugin()
+    ]
+~~~
+
+从4.2M压缩到2.39-->1.27(关闭了css的map)
+
+~~~
+new OptimizeCSSAssetsPlugin({
+          cssProcessorOptions: {
+            parser: safePostCssParser,
+            map:false /*shouldUseSourceMap
+              ? {
+                  // `inline: false` forces the sourcemap to be output into a
+                  // separate file
+                  inline: false,
+                  // `annotation: true` appends the sourceMappingURL to the end of
+                  // the css file, helping the browser find the sourcemap
+                  annotation: true,
+                }
+              : false,*/
+          },
+~~~
 
 
 
+5.93-->2.08--1.62
 
+![1548124702700](assets/1548124702700.png)
